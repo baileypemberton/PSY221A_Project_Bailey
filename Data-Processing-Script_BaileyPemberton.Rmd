@@ -1,4 +1,3 @@
-(test)
 H1: Reported political views will have an influence on a composite jealousy in relationships variable (jealousy about emotional infidelity, jealousy about sexual infidelity).
   IV: Political views
   DV: Jealousy in relationships composite score
