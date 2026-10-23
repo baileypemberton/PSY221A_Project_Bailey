@@ -1,0 +1,116 @@
+H1: Reported political views will have an influence on a composite jealousy in relationships variable (jealousy about emotional infidelity, jealousy about sexual infidelity).
+  IV: Political views
+  DV: Jealousy in relationships composite score
+
+H2: Reported financial prospects will have an influence on preferred long-term partner age.
+  IV: Financial prospects
+  DV: Preferred long-term partner age
+
+```{r load data}
+
+library(codebook)
+
+raw <- read.csv("Data/raw/data_doctored.csv")
+getwd()
+
+#make data with ID, and other target variables; keep raw unchanged
+data <- raw[,c("ResponseId","self_resources","ideallt_age","jealemo","jealsex","cot_politics")]
+```
+
+
+```{r replacing likert values w NA if outside range}
+
+likert5 <- c("cot_politics")
+
+likert7 <- c("jealemo","jealsex")
+
+likert11 <- c("self_resources","ideallt_age")
+
+for(i in likert7){
+  data[,i] <- ifelse(data[,i] %in% 1:7,data[,i],NA)
+}
+
+for(i in likert11){
+  data[,i] <- ifelse(data[,i] %in% 1:11,data[,i],NA)
+}
+
+for(i in likert5){
+  data[,i] <- ifelse(data[,i] %in% 1:5,data[,i],NA)
+}
+```
+
+```{r create jealousy composite variable}
+
+jeal <- c("jealemo","jealsex")
+
+#calculate jealousy as the mean of both items
+#for NAs, conduct available item mean
+data$jealousy <- rowMeans(data[,c(jeal)], na.rm=TRUE)
+
+```
+
+
+```{r create H1 data}
+
+h1 <- data[!is.na(data$cot_politics) & !is.na(data$jealousy),c("ResponseId","cot_politics","jealousy")]
+
+
+```
+
+
+```{r create H2 data}
+
+h2 <- data[!is.na(data$self_resources) & !is.na(data$ideallt_age),c("ResponseId","self_resources","ideallt_age")]
+
+```
+
+
+```{r check variables}
+
+dim(h1)
+str(h1)
+head(h1)
+colSums(is.na(h1))
+range(h1$cot_politics)
+range(h1$jealousy)
+sum(duplicated(h1$ResponseId))
+
+
+dim(h2)
+str(h2)
+head(h2)
+colSums(is.na(h2))
+range(h2$self_resources)
+range(h2$ideallt_age)
+sum(duplicated(h2$ResponseId))
+```
+
+```{r label variables}
+
+var_label(h1) <- c("Participant ID","Self-Report Political Views (1-5; 1 = Far Left, 3 = Center, 5 = Far Right","Composite Jealousy Score (1-7; 1 = Not at all jealous, 4 = Moderately jealous, 7 = Extremely jealous")
+
+var_label(h2) <- c("Participant ID","Self-Report Financial Prospects (1-11; 1 = Very low, 6 = Average, 11 = Very high","Preferred Long-Term Partner Age (1-11; 1 = Under 20, 2 = 21-21...11 = Over 75")
+
+```
+
+
+```{r make codebooks}
+
+compact_codebook(h1)
+
+compact_codebook(h2)
+
+```
+
+
+```{r save!}
+#save h1Data and h2Data without an extra row-number column
+write.csv(h1,"data/processed/h1.csv",row.names=F)
+write.csv(h2,"data/processed/h2.csv",row.names=F)
+
+#read the files back and confirm their dimensions
+h1 <- read.csv("data/processed/h1.csv")
+h2 <- read.csv("data/processed/h2.csv")
+
+```
+
