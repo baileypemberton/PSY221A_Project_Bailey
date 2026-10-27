@@ -42,6 +42,17 @@ for(i in likert11){
   data[,i] <- ifelse(data[,i] %in% 1:11,data[,i],NA)
 }
 
+###JK: This loop turns every political-view response into NA. ###
+# Earlier, factor() changed the responses from numeric codes into labeled categories such as "Far Left" and "Center".
+# Here, %in% 1:5 checks those labels against the numbers 1 through 5, so none of them match.
+# ifelse() therefore replaces every response with NA, leaving your final h1 table with zero rows.
+# The simplest fix is to remove this entire for(i in likert5) loop and keep your earlier factor() code.
+# Your factor() call already specifies levels 1:5, so any original value outside those levels becomes NA.
+# After removing the loop, restart R and run from the beginning to restore the original responses.
+# Check the categories again after the factor() step:
+# table(data$cot_politics, useNA = "ifany")
+###  End of comment ###
+
 for(i in likert5){
   data[,i] <- ifelse(data[,i] %in% 1:5,data[,i],NA)
 }
@@ -53,6 +64,9 @@ jeal <- c("jealemo","jealsex")
 
 #calculate jealousy as the mean of both items
 #for NAs, conduct available item mean
+
+###JK: Please include this rule in your codebook description###
+
 data$jealousy <- rowMeans(data[,c(jeal)], na.rm=TRUE)
 
 ```
@@ -79,6 +93,13 @@ dim(h1)
 str(h1)
 head(h1)
 colSums(is.na(h1))
+
+###JK: Use table() to check the political categories rather than range(). ###
+# After fixing the earlier loop, cot_politics will remain a factor, and range() will give an error because it is not defined for this unordered factor.
+# Replace the range(h1$cot_politics) line below with:
+# table(h1$cot_politics, useNA = "ifany")
+###  End of comment ###
+
 range(h1$cot_politics)
 range(h1$jealousy)
 sum(duplicated(h1$ResponseId))
@@ -97,6 +118,15 @@ sum(duplicated(h2$ResponseId))
 
 var_label(h1) <- c("Participant ID","Self-Report Political Views (1-5; 1 = Far Left, 3 = Center, 5 = Far Right","Composite Jealousy Score (1-7; 1 = Not at all jealous, 4 = Moderately jealous, 7 = Extremely jealous")
 
+###JK:Small typo, "2 = 21-21" below should be "2 = 21-26".###
+# You can replace the H2 label assignment below with:
+# var_label(h2) <- c(
+#   "Participant ID",
+#   "Self-reported financial prospects: 1=Very low, 6=Average, 11=Very high.",
+#   "Preferred long-term partner age group: 1=Under 20; 2=21-26; 3=27-32; 4=33-38; 5=39-44; 6=45-50; 7=51-56; 8=57-62; 9=63-68; 10=69-74; 11=Over 75."
+# )
+###  End of comment ###
+
 var_label(h2) <- c("Participant ID","Self-Report Financial Prospects (1-11; 1 = Very low, 6 = Average, 11 = Very high","Preferred Long-Term Partner Age (1-11; 1 = Under 20, 2 = 21-21...11 = Over 75")
 
 ```
@@ -112,6 +142,19 @@ compact_codebook(h2)
 
 
 ```{r save!}
+###JK: Create the output folder before saving the CSV files. ###
+# The submitted project does not contain a data/processed folder, and write.csv() cannot create the folder itself.
+# Your existing input folder is named Data with a capital D, so use that spelling consistently for saving and reading too.
+# Replace the save and read-back lines in this chunk with:
+# dir.create("Data/processed", recursive = TRUE, showWarnings = FALSE)
+# write.csv(h1, "Data/processed/h1.csv", row.names = FALSE)
+# write.csv(h2, "Data/processed/h2.csv", row.names = FALSE)
+# h1 <- read.csv("Data/processed/h1.csv")
+# h2 <- read.csv("Data/processed/h2.csv")
+# dim(h1)
+# dim(h2)
+###  End of comment ###
+
 #save h1Data and h2Data without an extra row-number column
 write.csv(h1,"data/processed/h1.csv",row.names=F)
 write.csv(h2,"data/processed/h2.csv",row.names=F)
