@@ -1,0 +1,63 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+H1: Reported political views will have an influence on a composite jealousy in relationships variable (jealousy about emotional infidelity, jealousy about sexual infidelity).
+  IV: Political views
+  DV: Jealousy in relationships composite score
+
+H2: Reported financial prospects will have an influence on preferred long-term partner age.
+  IV: Financial prospects
+  DV: Preferred long-term partner age
+  
+```{r load package + data}
+
+library(ggplot2)
+library(ggrain)
+install.packages("ggplot2")
+install.packages("ggrain")
+
+
+h1 <- read.csv("data/processed/h1.csv")
+h2 <- read.csv("data/processed/h2.csv")
+
+```
+  
+```{r h1 plot}
+h1Plot <- ggplot(data = h1,
+                 aes(x = cot_politics,
+                     y = jealousy))+
+    labs(x = "Political Views",
+       y = "Jealousy",
+       title = "Jealousy in Romantic Relationships by Political Views")+
+  geom_rain(likert=T)+
+   theme_gray(base_size = 8)
+
+h1Plot
+```
+
+```{r h2 plot}
+
+h2Plot <- ggplot(data = h2,
+                 aes(x = self_resources,
+                     y = ideallt_age))+
+  labs(x = "Financial Prospects",
+       y = "Preferred Long-Term Partner Age",
+       title = "Preferred Long-Term Partner Age by Individual Financial Prospects")+
+     geom_jitter(width = .12, height = .04, alpha = .04, size = .6)
+
+
+h2Plot
+```
+
+
+```{r saving figures}
+
+ggsave("Figures/h1_figure.png", plot = h1Plot, width = 10, height = 6, dpi = 300)
+
+ggsave("Figures/h2_figure.png", plot = h2Plot, width = 10, height = 6, dpi = 300)
+
+```
+  
+  
