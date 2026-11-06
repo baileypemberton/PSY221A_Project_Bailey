@@ -1,0 +1,86 @@
+H1: Reported political views will have an influence on a composite jealousy in relationships variable (jealousy about emotional infidelity, jealousy about sexual infidelity).
+  IV: Political views 
+  DV: Jealousy in relationships composite score 
+
+H2: Reported financial prospects will have an influence on daily free time.
+  IV: Financial prospects
+  DV: Daily free time
+  
+```{r load data}
+
+install.packages("psych")
+library(psych)
+
+getwd()
+read.csv("Data/processed/h1.csv")
+read.csv("Data/processed/h2.csv")
+
+```
+  
+```{r histograms}
+
+hist(h1$jealousy)
+hist(h2$financialProspects)
+hist(h2$freeTime)
+
+```
+
+```{r descriptive stats - jealousy}
+
+# Mean
+mean(h1$jealousy, na.rm = TRUE)
+
+# Median
+median(h1$jealousy, na.rm = TRUE)
+
+# Range
+range(h1$jealousy, na.rm = TRUE)
+
+# IQR
+IQR(h1$jealousy, na.rm = TRUE)
+
+```
+
+```{r descriptive stats - financial prospects}
+
+# Mean
+mean(h2$financialProspects, na.rm = TRUE)
+
+# Median
+median(h2$financialProspects, na.rm = TRUE)
+
+# Range
+range(h2$financialProspects, na.rm = TRUE)
+
+# IQR
+IQR(h2$financialProspects, na.rm = TRUE)
+
+```
+
+```{r descriptive stats - free time}
+
+# Mean
+mean(h2$freeTime, na.rm = TRUE)
+
+# Median
+median(h2$freeTime, na.rm = TRUE)
+
+# Range
+range(h2$freeTime, na.rm = TRUE)
+
+# IQR
+IQR(h2$freeTime, na.rm = TRUE)
+
+```
+
+
+```{r covariance and correlation}
+
+#covariance
+cov(h2$financialProspects, h2$freeTime, use = "complete.obs")
+
+#correlation
+cor(h2$financialProspects, h2$freeTime, use = "complete.obs")
+
+```
+
