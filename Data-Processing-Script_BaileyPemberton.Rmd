@@ -2,9 +2,9 @@ H1: Reported political views will have an influence on a composite jealousy in r
   IV: Political views
   DV: Jealousy in relationships composite score
 
-H2: Reported financial prospects will have an influence on preferred long-term partner age.
+H2: Reported financial prospects will have an influence on daily free time.
   IV: Financial prospects
-  DV: Preferred long-term partner age
+  DV: Daily Free Time
 
 ```{r load data}
 
@@ -13,7 +13,7 @@ library(codebook)
 raw <- read.csv("Data/raw/data_doctored.csv")
 
 #make data with ID, and other target variables; keep raw unchanged
-data <- raw[,c("ResponseId","self_resources","ideallt_age","jealemo","jealsex","cot_politics")]
+data <- raw[,c("ResponseId","Time_free_1","self_resources","jealemo","jealsex","cot_politics")]
 ```
 
 ```{r recode political views}
@@ -29,7 +29,7 @@ data$cot_politics <- factor(data$cot_politics,
 
 likert7 <- c("jealemo","jealsex")
 
-likert11 <- c("self_resources","ideallt_age")
+likert11 <- c("self_resources")
 
 for(i in likert7){
   data[,i] <- ifelse(data[,i] %in% 1:7,data[,i],NA)
@@ -38,6 +38,9 @@ for(i in likert7){
 for(i in likert11){
   data[,i] <- ifelse(data[,i] %in% 1:11,data[,i],NA)
 }
+
+data[,2] <- ifelse(data[,2] > 360, NA, data[,2])
+
 
 ```
 
@@ -54,10 +57,19 @@ data$jealousy <- rowMeans(data[,c(jeal)], na.rm=TRUE)
 
 ```
 
+```{r re-label variables}
+
+colnames(data)[1] <- "id"
+colnames(data)[2] <- "freeTime"
+colnames(data)[3] <- "financialProspects"
+colnames(data)[6] <- "politics"
+
+```
+
 
 ```{r create H1 data}
 
-h1 <- data[!is.na(data$cot_politics) & !is.na(data$jealousy),c("ResponseId","cot_politics","jealousy")]
+h1 <- data[!is.na(data$politics) & !is.na(data$jealousy),c("id","politics","jealousy")]
 
 
 ```
@@ -65,7 +77,7 @@ h1 <- data[!is.na(data$cot_politics) & !is.na(data$jealousy),c("ResponseId","cot
 
 ```{r create H2 data}
 
-h2 <- data[!is.na(data$self_resources) & !is.na(data$ideallt_age),c("ResponseId","self_resources","ideallt_age")]
+h2 <- data[!is.na(data$financialProspects) & !is.na(data$freeTime),c("id","financialProspects","freeTime")]
 
 ```
 
@@ -98,7 +110,7 @@ var_label(h1) <- c("Participant ID",
 var_label(h2) <- c(
   "Participant ID",
   "Self-reported financial prospects: 1=Very low, 6=Average, 11=Very high.",
-  "Preferred long-term partner age group: 1=Under 20; 2=21-26; 3=27-32; 4=33-38; 5=39-44; 6=45-50; 7=51-56; 8=57-62; 9=63-68; 10=69-74; 11=Over 75."
+  "Daily Free Time (in minutes)"
  )
 
 ```

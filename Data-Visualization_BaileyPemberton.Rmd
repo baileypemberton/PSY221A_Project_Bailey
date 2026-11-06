@@ -26,7 +26,7 @@ h2 <- read.csv("data/processed/h2.csv")
   
 ```{r h1 plot}
 h1Plot <- ggplot(data = h1,
-                 aes(x = cot_politics,
+                 aes(x = politics,
                      y = jealousy))+
     labs(x = "Political Views",
        y = "Jealousy",
@@ -40,12 +40,13 @@ h1Plot
 ```{r h2 plot}
 
 h2Plot <- ggplot(data = h2,
-                 aes(x = self_resources,
-                     y = ideallt_age))+
+                 aes(x = financialProspects,
+                     y = freeTime)) +
   labs(x = "Financial Prospects",
-       y = "Preferred Long-Term Partner Age",
-       title = "Preferred Long-Term Partner Age by Individual Financial Prospects")+
-     geom_jitter(width = .12, height = .04, alpha = .04, size = .6)
+       y = "Daily Free Time (Minutes)",
+       title = "Daily Free Time by Individual Financial Prospects") +
+  geom_jitter(width = .12, height = 0, alpha = .10, size = .6) +
+  geom_smooth(method = "lm")
 
 
 h2Plot
