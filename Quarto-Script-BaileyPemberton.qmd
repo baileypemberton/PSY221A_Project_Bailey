@@ -1,0 +1,102 @@
+---
+title: "Quarto-File-BaileyPemberton"
+format: html
+editor: visual
+---
+
+```{r}
+#| label: load-data
+#| include: false 
+library(ggplot2)
+library(ggrain)
+
+h1 <- read.csv("Data/processed/h1.csv")
+
+h2 <- read.csv("Data/processed/h2.csv")
+```
+
+## Hypothesis 1
+
+Reported political views will have an influence on a composite jealousy in relationships variable (jealousy about emotional infidelity, jealousy about sexual infidelity).
+
+### Variables and descriptive statistics
+
+-   **Reported Political Views (`politics`):** A categorical variable with five groups: Far Left, Center Left, Center, Center Right, Far Right
+-   **Jealousy (`jealousy`):** Composite jealousy variable comprised of the mean score across jealousy about emotional infidelity and jealousy about sexual infidelity
+
+```{r}
+
+#| label: h1-descriptives
+# Count respondents in each group.
+table(h1$politics)
+
+# Summarize jealousy separately for each group.
+by(h1$politics, h1$jealousy, summary)
+
+```
+
+### Graph
+
+@fig-jealousy shows the distribution of points by political view. The half-violin shows the shape of the distribution, the box summarizes the median and quartiles, and the dots represent individual responses.
+ 
+```{r}
+
+#| label: fig-jealousy
+#| fig-cap: "Relationship Jealousy, by Political View." #adds caption under figure
+#| fig-width: 8
+#| fig-height: 5
+
+ggplot(h1, aes(x = politics, y = jealousy,
+                   fill = politics)) +
+  geom_rain(alpha = 0.5, point.args = list(alpha = 0.04, size = 0.6)) +
+  labs(x = "Political View", y = "Jealousy") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+```
+ 
+## H2. Reported financial prospects will have an influence on daily free time.
+
+### Variables and descriptive statistics
+
+-   **Financial Prospects (`financialProspects`):** A single item about future financial prospects. Ranged from 1=Very low, 6=Average, 11=Very high
+-   **Daily Free Time (`freeTime`):** The amount of daily free time (in minutes) participants reported having
+
+```{r}
+
+#| label: h2-descriptives
+summary(h2[, c("financialProspects", "freeTime")])
+
+```
+
+### Graph
+
+@fig-freeTime shows the relationship between financial prospects and free time. Points are jittered to make overlapping responses easier to see; the recorded scores are unchanged. The line summarizes the linear trend.
+
+```{r}
+
+#| label: fig-freeTime
+#| fig-cap: "Financial Prospects and Daily Free Time."
+#| fig-width: 8
+#| fig-height: 5
+
+ggplot(data = h2,
+                 aes(x = financialProspects,
+                     y = freeTime)) +
+  labs(x = "Financial Prospects",
+       y = "Daily Free Time (Minutes)",
+       title = "Daily Free Time by Individual Financial Prospects") +
+  geom_jitter(width = .12, height = 0, alpha = .10, size = .6) +
+  geom_smooth(method = "lm")
+
+```
+
+### Observed trend
+
+```{r}
+#| label: correlation
+r <- cor(h2$financialProspects, h2$freeTime, use = "complete.obs")
+round(r, 2) #rounds the correlation to 2 decimal places
+```
+
+The correlation was `{r} round(r, 2)`, indicating a weak negative association. Respondents who reported higher financial prospects tended to report lower daily free time.
