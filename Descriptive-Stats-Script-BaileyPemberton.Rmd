@@ -12,6 +12,12 @@ install.packages("psych")
 library(psych)
 
 getwd()
+###JK: Assign the imported tables to h1 and h2 so the rest of the script can use them. ###
+# read.csv() reads the file, but these two lines do not save the results as objects. The later h1 and h2 calls therefore fail in a fresh session.
+# h1 <- read.csv("Data/processed/h1.csv")
+# h2 <- read.csv("Data/processed/h2.csv")
+###  End of comment ###
+
 read.csv("Data/processed/h1.csv")
 read.csv("Data/processed/h2.csv")
 
