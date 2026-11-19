@@ -32,19 +32,9 @@ Reported political views will have an influence on a composite jealousy in relat
 table(h1$politics)
 
 # Summarize jealousy separately for each group.
-###JK: Put the jealousy score first and the political groups second in by(). ###
-# The current call summarizes political labels within each jealousy score. To summarize jealousy within each political group, use:
-# by(h1$jealousy, h1$politics, summary)
-###  End of comment ###
-
 by(h1$politics, h1$jealousy, summary)
 
 ```
-
-###JK: Put each figure-option block immediately below its opening R chunk fence. ###
-# Remove the blank line between ```{r} and the #| label / fig-cap lines in both figure chunks.
-# Quarto is currently treating those lines as ordinary R comments, so the Figure references and captions are not registered. Render again after moving them.
-###  End of comment ###
 
 ### Graph
 
