@@ -1,0 +1,52 @@
+---
+title: "PSY221A: Correlation and ANOVA"
+output: html_document
+---
+
+```{r load data}
+
+h1Data <- read.csv("Data/processed/h1.csv")
+h2Data <- read.csv("Data/processed/h2.csv")
+
+# Check the variable types, missing values, and group sizes.
+str(h1Data)
+str(h2Data)
+table(h1Data$politics)
+
+```
+
+```{r correlations}
+
+cor(h2Data$financialProspects,h2Data$freeTime)
+
+cor.test(h2Data$financialProspects,h2Data$freeTime)
+
+```
+
+```{r anova}
+
+by(h1Data$jealousy, h1Data$politics, mean)
+
+h1Anova <- aov(jealousy ~ politics, data = h1Data)
+summary(h1Anova)
+
+```
+
+```{rpost_hoc}
+
+TukeyHSD(h1Anova)}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
