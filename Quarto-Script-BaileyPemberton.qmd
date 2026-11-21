@@ -5,6 +5,10 @@ editor: visual
 embed-resources: true
 ---
 
+###JK: Good work! I made a few small corrections below. ###
+# I corrected the by() order (line 40) to summarize jealousy within each political group, and moved the figure options directly below the chunk openings (lines 50 and 83) so Quarto can recognize the captions and figure references.
+###  End of comment ###
+
 ```{r}
 #| label: load-data
 #| include: false 
@@ -32,16 +36,17 @@ Reported political views will have an influence on a composite jealousy in relat
 table(h1$politics)
 
 # Summarize jealousy separately for each group.
-by(h1$politics, h1$jealousy, summary)
+
+by(h1$jealousy, h1$politics, summary)
 
 ```
+
 
 ### Graph
 
 @fig-jealousy shows the distribution of points by political view. The half-violin shows the shape of the distribution, the box summarizes the median and quartiles, and the dots represent individual responses.
  
 ```{r}
-
 #| label: fig-jealousy
 #| fig-cap: "Relationship Jealousy, by Political View." #adds caption under figure
 #| fig-width: 8
@@ -75,7 +80,6 @@ summary(h2[, c("financialProspects", "freeTime")])
 @fig-freeTime shows the relationship between financial prospects and free time. Points are jittered to make overlapping responses easier to see; the recorded scores are unchanged. The line summarizes the linear trend.
 
 ```{r}
-
 #| label: fig-freeTime
 #| fig-cap: "Financial Prospects and Daily Free Time."
 #| fig-width: 8
